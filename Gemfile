@@ -1,7 +1,7 @@
 source 'http://rubygems.org'
 
 gem 'json', '1.6.3'
-gem 'HTTParty'
+gem 'httparty'
 gem 'rspec-expectations'
 gem 'json-schema'
 gem 'cuke_sniffer'
