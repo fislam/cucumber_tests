@@ -1,0 +1,2323 @@
+
+
+<link rel="stylesheet" type="text/css">
+
+<style>
+    .new_sub_section {
+        border: 2px solid #509f50;
+        padding: 2px;
+        display: none;
+        overflow:auto;
+    }
+
+    .title {
+        padding-left: 1%;
+        width: 25%;
+        background-color: #509f50;
+        color: white;
+        border-top: 0;
+        border-bottom: 0;
+        font-weight: bold;
+        font-size: 21pt;
+        cursor: pointer;
+        font-family: Arial;
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+    }
+
+    .function_bar {
+        background-color: #509f50;
+        display: none;
+    }
+
+    .help {
+        cursor: hand;
+    }
+
+    .disabled_title_row {
+        background-color:#aca8a5;
+        cursor: hand;
+        padding-left: 2px;
+    }
+
+    .white_title_row {
+        cursor: hand;
+        padding-left: 2px;
+    }
+
+    .blue_title_row {
+        background-color:#ccffff;
+        cursor: hand;
+        padding-left: 2px;
+    }
+
+    .white_row {
+        padding-left: 2px;
+    }
+
+    .blue_row {
+        background-color:#ccffff;
+        padding-left: 2px;
+    }
+
+    .colored_subsection {
+        width:100%;
+        padding-left: 8px;
+    }
+
+    .shrink_section {
+        border: 2px solid #509f50;
+        display: none;
+    }
+
+    .table_top {
+        width: 20%;
+        font-size: 14pt;
+        padding: 0;
+    }
+
+    .divide_row {
+        border-bottom: 1px solid black;
+    }
+
+    .red_number {
+        color: red;
+        font-weight: bold;
+        display: inline;
+    }
+
+    .notes {
+        font-weight: bold;
+    }
+
+    .sub_section {
+        display: none;
+        margin-left: 1%;
+        margin-right: 1%;
+        border-top: 2px solid #509f50;
+    }
+
+    .empty_set_message {
+        font-weight: bold;
+        margin-left: 1%;
+    }
+
+    .rule_notes {
+        margin-left: 1%;
+        border-left: 2px solid #90ee90;
+        border-top: 2px solid #90ee90;
+        display: block;
+        clear: left;
+        padding-bottom: 0%;
+        text-indent: 0%;
+        padding-left: 0.5%;
+        margin-bottom: 0.5%;
+    }
+
+    .rule_style {
+        margin: 0;
+        text_indent: 3%;
+
+    }
+
+    .rule_heading {
+        font-weight: bold;
+        margin: 0.25%;
+    }
+
+    ol {
+        list-style-type: none;
+        display: block;
+        padding-left: 1%
+
+    }
+
+</style>
+<script type="text/javascript">
+
+    function collapseAll(css_class) {
+        updateAll(css_class, "none");
+    }
+
+    function expandAll(css_class) {
+        updateAll(css_class, "inline-block");
+    }
+
+    function expandAllShiftingRows(css_class) {
+        var elements = document.getElementsByClassName(css_class)
+        for (var i = 0; i < elements.length; i++) {
+            existing_style = elements.item(i).getAttribute('style');
+            elements.item(i).setAttribute('style', existing_style.replace(/display:\s*none/, "display: block-inline"));
+        }
+    }
+
+    function updateAll(css_class, display_type){
+        var elements = document.getElementsByClassName(css_class)
+        for (var i = 0; i < elements.length; i++) {
+            elements.item(i).style.display = display_type;
+        }
+    }
+
+    function toggleById(item, link) {
+        updateDisplayStatus(document.getElementById(item));
+        toggleText(link)
+    }
+    function updateDisplayStatus(object) {
+        if (object.tagName == "TR") {
+            updateDisplayStatusForTR(object);
+        } else {
+            object.style.display = (object.style.display == "block") ? 'none' : "block";
+        }
+    }
+
+    function updateDivScroll(divId, tableId) {
+        div = document.getElementById(divId);
+        table = document.getElementById(tableId);
+        if (table.offsetHeight >= 500) {
+            div.style.height = "75%";
+            div.style.overflow = "auto";
+        } else {
+            div.style.height = "";
+            div.style.overflow = "none";
+        }
+
+    }
+
+    function updateDisplayStatusForTR(object) {
+        existing_style = object.getAttribute('style');
+        if (object.style.display == "none") {
+            object.setAttribute('style', existing_style.replace(/display:\s*none/, "display: block-inline"))
+        } else {
+            object.setAttribute('style', existing_style.replace("display: block-inline", "display: none"))
+        }
+    }
+    function toggleText(link) {
+        var char_result = link.innerHTML.indexOf("+") > -1 ? "-" : "+";
+        link.innerHTML = link.innerHTML.replace(/(\+|\-)/, char_result)
+    }
+
+
+</script>
+<div style="font-family: Arial; float: left; color: #509f50; font-size: 20px; font-weight: bold; padding-bottom: 1px;">
+  Cuke Sniffer
+</div>
+<br style="clear:both">
+<div style="border-top: 2px solid #509f50; text-align: right;">
+  <div style="font-family: Arial;border-bottom-left-radius: 15px; border-bottom-right-radius: 15px;float: right; background-color:#509f50; color:white;padding-left:40px;font-size:11pt;font-weight:bold;padding-right:10px;">
+    Score: 20</div>
+</div>
+<br style="clear:both">
+<div class="title" onclick="toggleById('summary_data', this)">
+  Summary -
+</div>
+<div class="shrink_section" style="display: block;" id="summary_data">
+  
+  <table style="padding-left:2px; width: 100%;" class="notes" border="0" cellspacing="0">
+    <tr class="divide_row">
+      <td class="table_top"></td>
+      <td class="table_top">Features</td>
+      <td class="table_top">Scenarios</td>
+      <td class="table_top">Step Definitions</td>
+      <td class="table_top">Hooks</td>
+    </tr>
+    <tr class="blue_row">
+      <td>
+        Total Score
+        <a title="Total Points for a section." class="help">(?)</a>
+      </td>
+      
+          <td>
+            0
+          </td>
+      
+          <td>
+            20
+          </td>
+      
+          <td>
+            0
+          </td>
+      
+          <td>
+            0
+          </td>
+      
+    </tr>
+    <tr>
+      <td>
+        Count
+        <a title="Total Number of objects found in the project." class="help" class="help">(?)</a>
+      </td>
+      
+          <td>1</td>
+      
+          <td>1</td>
+      
+          <td>5</td>
+      
+          <td>0</td>
+      
+    </tr>
+    <tr/>
+    <tr class="blue_row">
+      <td>
+        Lowest Score
+        <a title="Score of the best object found." class="help">(?)</a>
+      </td>
+      
+          <td>0</td>
+      
+          <td>20</td>
+      
+          <td>0</td>
+      
+          <td></td>
+      
+    </tr>
+    <tr>
+      <td>
+        Highest Score
+        <a title="Score of the object with the most to improve on." class="help">(?)</a>
+      </td>
+      
+          <td>0</td>
+      
+          <td>20</td>
+      
+          <td>0</td>
+      
+          <td></td>
+      
+    </tr>
+    <tr class="blue_row">
+      <td>
+        Average Score
+        <a title="Average score of a section." class="help">(?)</a>
+      </td>
+      
+          <td>0.0</td>
+      
+          <td>20.0</td>
+      
+          <td>0.0</td>
+      
+          <td>NaN</td>
+      
+    </tr>
+    <tr/>
+    <tr>
+      <td>
+        Threshold
+        <a title="The maximum score an object can have to be considered good." class="help">(?)</a>
+      </td>
+      
+          <td>30</td>
+      
+          <td>30</td>
+      
+          <td>20</td>
+      
+          <td>20</td>
+      
+    </tr>
+    <tr class="blue_row">
+      <td>
+        Good
+        <a title="Percentage of the objects that can be considered good in the project." class="help">(?)</a>
+      </td>
+      
+          <td>100.0
+            %
+          </td>
+      
+          <td>100.0
+            %
+          </td>
+      
+          <td>100.0
+            %
+          </td>
+      
+          <td>NaN
+            %
+          </td>
+      
+    </tr>
+    <tr>
+      <td>
+        Bad
+        <a title="Percentage of the objects that can be considered bad in the project." class="help">(?)</a>
+      </td>
+      
+          <td>0.0
+            %
+          </td>
+      
+          <td>0.0
+            %
+          </td>
+      
+          <td>0.0
+            %
+          </td>
+      
+          <td>NaN
+            %
+          </td>
+      
+    </tr>
+  </table>
+</div>
+<br style="clear:both">
+
+<div class="title" onclick="toggleById('improvement_list_data', this) ;updateDivScroll('improvement_list_data', 'improvements_table');">
+  Improvement List +
+</div>
+<div class="new_sub_section" id="improvement_list_data">
+  
+  
+  <table id="improvements_table" style="width: 100%" border="0" cellspacing="0">
+    
+    
+        
+            <tr>
+        
+        <td class="red_number" style="width:1%;">1</td>
+        <td class="notes" style="padding-left: 2px;">Given/When/Then used multiple times in the same Scenario.</td>
+        </tr>
+        
+    
+        
+            <tr class="blue_row">
+        
+        <td class="red_number" style="width:1%;">1</td>
+        <td class="notes" style="padding-left: 2px;">Scenario steps out of Given/When/Then order.</td>
+        </tr>
+        
+    
+  </table>
+</div>
+<br style="clear:both">
+<div id="rulesTab" class="title" onclick="toggleById('rules', this);updateDisplayStatus(document.getElementById('rules_function_bar'));updateDivScroll('rules', 'rules_table');">
+  Rules +
+</div>
+
+<div id="rules_function_bar" class="function_bar">
+  <input type="button" class="function_button" value="Collapse All" onclick="collapseAll('rule_detail')" />
+  <input type="button" class="function_button" value="Expand All" onclick="expandAll('rule_detail')" />
+</div>
+
+<div class="shrink_section" id="rules">
+  <table id="rules_table" style="width: 100%" border="0" cellspacing="0">
+    
+    
+        
+            <tr class="notes white_title_row" onclick="updateDisplayStatus(document.getElementById('rule_detail_0'));updateDivScroll('rules', 'rules_table');">
+        
+
+            <td>
+              Scenario Outline with no examples.
+            </td>
+        </tr>
+
+        
+            <tr id="rule_detail_0" class="colored_subsection white_row rule_detail" style="display:none;">
+        
+        <td style="padding-left:8px;">
+          <table border="0" cellspacing="0">
+            <tr>
+              <td>
+                <b>Score:</b> 100
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Targets:</b> Scenario
+              </td>
+            </tr>
+            
+          </table>
+        </td>
+        </tr>
+
+        
+    
+        
+            <tr class="notes blue_title_row" onclick="updateDisplayStatus(document.getElementById('rule_detail_1'));updateDivScroll('rules', 'rules_table');">
+        
+
+            <td>
+              Scenario Outline with no examples table.
+            </td>
+        </tr>
+
+        
+            <tr id="rule_detail_1" class="colored_subsection blue_row rule_detail" style="display:none;">
+        
+        <td style="padding-left:8px;">
+          <table border="0" cellspacing="0">
+            <tr>
+              <td>
+                <b>Score:</b> 100
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Targets:</b> Scenario
+              </td>
+            </tr>
+            
+          </table>
+        </td>
+        </tr>
+
+        
+    
+        
+            <tr class="notes white_title_row" onclick="updateDisplayStatus(document.getElementById('rule_detail_2'));updateDivScroll('rules', 'rules_table');">
+        
+
+            <td>
+              Recursive nested step call.
+            </td>
+        </tr>
+
+        
+            <tr id="rule_detail_2" class="colored_subsection white_row rule_detail" style="display:none;">
+        
+        <td style="padding-left:8px;">
+          <table border="0" cellspacing="0">
+            <tr>
+              <td>
+                <b>Score:</b> 100
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Targets:</b> StepDefinition
+              </td>
+            </tr>
+            
+          </table>
+        </td>
+        </tr>
+
+        
+    
+        
+            <tr class="notes blue_title_row" onclick="updateDisplayStatus(document.getElementById('rule_detail_3'));updateDivScroll('rules', 'rules_table');">
+        
+
+            <td>
+              There is a background with a tag. This feature file cannot run!
+            </td>
+        </tr>
+
+        
+            <tr id="rule_detail_3" class="colored_subsection blue_row rule_detail" style="display:none;">
+        
+        <td style="padding-left:8px;">
+          <table border="0" cellspacing="0">
+            <tr>
+              <td>
+                <b>Score:</b> 100
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Targets:</b> Background
+              </td>
+            </tr>
+            
+          </table>
+        </td>
+        </tr>
+
+        
+    
+        
+            <tr class="notes white_title_row" onclick="updateDisplayStatus(document.getElementById('rule_detail_4'));updateDivScroll('rules', 'rules_table');">
+        
+
+            <td>
+              Comment comes between tag and properly executing line. This feature file cannot run!
+            </td>
+        </tr>
+
+        
+            <tr id="rule_detail_4" class="colored_subsection white_row rule_detail" style="display:none;">
+        
+        <td style="padding-left:8px;">
+          <table border="0" cellspacing="0">
+            <tr>
+              <td>
+                <b>Score:</b> 100
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Targets:</b> Feature, Scenario
+              </td>
+            </tr>
+            
+          </table>
+        </td>
+        </tr>
+
+        
+    
+        
+            <tr class="notes blue_title_row" onclick="updateDisplayStatus(document.getElementById('rule_detail_5'));updateDivScroll('rules', 'rules_table');">
+        
+
+            <td>
+              A nested step should not universally match all step definitions.  Dead steps cannot be correctly cataloged.
+            </td>
+        </tr>
+
+        
+            <tr id="rule_detail_5" class="colored_subsection blue_row rule_detail" style="display:none;">
+        
+        <td style="padding-left:8px;">
+          <table border="0" cellspacing="0">
+            <tr>
+              <td>
+                <b>Score:</b> 100
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Targets:</b> StepDefinition
+              </td>
+            </tr>
+            
+          </table>
+        </td>
+        </tr>
+
+        
+    
+        
+            <tr class="notes white_title_row" onclick="updateDisplayStatus(document.getElementById('rule_detail_6'));updateDivScroll('rules', 'rules_table');">
+        
+
+            <td>
+              Commented step.
+            </td>
+        </tr>
+
+        
+            <tr id="rule_detail_6" class="colored_subsection white_row rule_detail" style="display:none;">
+        
+        <td style="padding-left:8px;">
+          <table border="0" cellspacing="0">
+            <tr>
+              <td>
+                <b>Score:</b> 25
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Targets:</b> Scenario, Background
+              </td>
+            </tr>
+            
+          </table>
+        </td>
+        </tr>
+
+        
+    
+        
+            <tr class="notes blue_title_row" onclick="updateDisplayStatus(document.getElementById('rule_detail_7'));updateDivScroll('rules', 'rules_table');">
+        
+
+            <td>
+              Feature with no scenarios.
+            </td>
+        </tr>
+
+        
+            <tr id="rule_detail_7" class="colored_subsection blue_row rule_detail" style="display:none;">
+        
+        <td style="padding-left:8px;">
+          <table border="0" cellspacing="0">
+            <tr>
+              <td>
+                <b>Score:</b> 25
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Targets:</b> Feature
+              </td>
+            </tr>
+            
+          </table>
+        </td>
+        </tr>
+
+        
+    
+        
+            <tr class="notes white_title_row" onclick="updateDisplayStatus(document.getElementById('rule_detail_8'));updateDivScroll('rules', 'rules_table');">
+        
+
+            <td>
+              {class} has no description.
+            </td>
+        </tr>
+
+        
+            <tr id="rule_detail_8" class="colored_subsection white_row rule_detail" style="display:none;">
+        
+        <td style="padding-left:8px;">
+          <table border="0" cellspacing="0">
+            <tr>
+              <td>
+                <b>Score:</b> 25
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Targets:</b> Feature, Scenario
+              </td>
+            </tr>
+            
+          </table>
+        </td>
+        </tr>
+
+        
+    
+        
+            <tr class="notes blue_title_row" onclick="updateDisplayStatus(document.getElementById('rule_detail_9'));updateDivScroll('rules', 'rules_table');">
+        
+
+            <td>
+              Commented example.
+            </td>
+        </tr>
+
+        
+            <tr id="rule_detail_9" class="colored_subsection blue_row rule_detail" style="display:none;">
+        
+        <td style="padding-left:8px;">
+          <table border="0" cellspacing="0">
+            <tr>
+              <td>
+                <b>Score:</b> 25
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Targets:</b> Scenario
+              </td>
+            </tr>
+            
+          </table>
+        </td>
+        </tr>
+
+        
+    
+        
+            <tr class="notes white_title_row" onclick="updateDisplayStatus(document.getElementById('rule_detail_10'));updateDivScroll('rules', 'rules_table');">
+        
+
+            <td>
+              No steps in Scenario.
+            </td>
+        </tr>
+
+        
+            <tr id="rule_detail_10" class="colored_subsection white_row rule_detail" style="display:none;">
+        
+        <td style="padding-left:8px;">
+          <table border="0" cellspacing="0">
+            <tr>
+              <td>
+                <b>Score:</b> 25
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Targets:</b> Scenario, Background
+              </td>
+            </tr>
+            
+          </table>
+        </td>
+        </tr>
+
+        
+    
+        
+            <tr class="notes blue_title_row" onclick="updateDisplayStatus(document.getElementById('rule_detail_11'));updateDivScroll('rules', 'rules_table');">
+        
+
+            <td>
+              Step that is only one word long.
+            </td>
+        </tr>
+
+        
+            <tr id="rule_detail_11" class="colored_subsection blue_row rule_detail" style="display:none;">
+        
+        <td style="padding-left:8px;">
+          <table border="0" cellspacing="0">
+            <tr>
+              <td>
+                <b>Score:</b> 25
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Targets:</b> Scenario, Background
+              </td>
+            </tr>
+            
+          </table>
+        </td>
+        </tr>
+
+        
+    
+        
+            <tr class="notes white_title_row" onclick="updateDisplayStatus(document.getElementById('rule_detail_12'));updateDivScroll('rules', 'rules_table');">
+        
+
+            <td>
+              No code in Step Definition.
+            </td>
+        </tr>
+
+        
+            <tr id="rule_detail_12" class="colored_subsection white_row rule_detail" style="display:none;">
+        
+        <td style="padding-left:8px;">
+          <table border="0" cellspacing="0">
+            <tr>
+              <td>
+                <b>Score:</b> 25
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Targets:</b> StepDefinition
+              </td>
+            </tr>
+            
+          </table>
+        </td>
+        </tr>
+
+        
+    
+        
+            <tr class="notes blue_title_row" onclick="updateDisplayStatus(document.getElementById('rule_detail_13'));updateDivScroll('rules', 'rules_table');">
+        
+
+            <td>
+              Around hook without 2 parameters for Scenario and Block.
+            </td>
+        </tr>
+
+        
+            <tr id="rule_detail_13" class="colored_subsection blue_row rule_detail" style="display:none;">
+        
+        <td style="padding-left:8px;">
+          <table border="0" cellspacing="0">
+            <tr>
+              <td>
+                <b>Score:</b> 25
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Targets:</b> Hook
+              </td>
+            </tr>
+            
+          </table>
+        </td>
+        </tr>
+
+        
+    
+        
+            <tr class="notes white_title_row" onclick="updateDisplayStatus(document.getElementById('rule_detail_14'));updateDivScroll('rules', 'rules_table');">
+        
+
+            <td>
+              Around hook does not call its block.
+            </td>
+        </tr>
+
+        
+            <tr id="rule_detail_14" class="colored_subsection white_row rule_detail" style="display:none;">
+        
+        <td style="padding-left:8px;">
+          <table border="0" cellspacing="0">
+            <tr>
+              <td>
+                <b>Score:</b> 25
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Targets:</b> Hook
+              </td>
+            </tr>
+            
+          </table>
+        </td>
+        </tr>
+
+        
+    
+        
+            <tr class="notes blue_title_row" onclick="updateDisplayStatus(document.getElementById('rule_detail_15'));updateDivScroll('rules', 'rules_table');">
+        
+
+            <td>
+              Hook without a begin/rescue. Reduced visibility when debugging.
+            </td>
+        </tr>
+
+        
+            <tr id="rule_detail_15" class="colored_subsection blue_row rule_detail" style="display:none;">
+        
+        <td style="padding-left:8px;">
+          <table border="0" cellspacing="0">
+            <tr>
+              <td>
+                <b>Score:</b> 25
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Targets:</b> Hook
+              </td>
+            </tr>
+            
+          </table>
+        </td>
+        </tr>
+
+        
+    
+        
+            <tr class="notes white_title_row" onclick="updateDisplayStatus(document.getElementById('rule_detail_16'));updateDivScroll('rules', 'rules_table');">
+        
+
+            <td>
+              Hook that both expects and ignores the same tag. This hook will not function as expected.
+            </td>
+        </tr>
+
+        
+            <tr id="rule_detail_16" class="colored_subsection white_row rule_detail" style="display:none;">
+        
+        <td style="padding-left:8px;">
+          <table border="0" cellspacing="0">
+            <tr>
+              <td>
+                <b>Score:</b> 25
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Targets:</b> Hook
+              </td>
+            </tr>
+            
+          </table>
+        </td>
+        </tr>
+
+        
+    
+        
+            <tr class="notes blue_title_row" onclick="updateDisplayStatus(document.getElementById('rule_detail_17'));updateDivScroll('rules', 'rules_table');">
+        
+
+            <td>
+              Scenario Outline with only one example.
+            </td>
+        </tr>
+
+        
+            <tr id="rule_detail_17" class="colored_subsection blue_row rule_detail" style="display:none;">
+        
+        <td style="padding-left:8px;">
+          <table border="0" cellspacing="0">
+            <tr>
+              <td>
+                <b>Score:</b> 10
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Targets:</b> Scenario
+              </td>
+            </tr>
+            
+          </table>
+        </td>
+        </tr>
+
+        
+    
+        
+            <tr class="notes white_title_row" onclick="updateDisplayStatus(document.getElementById('rule_detail_18'));updateDivScroll('rules', 'rules_table');">
+        
+
+            <td>
+              Tag appears on all scenarios.
+            </td>
+        </tr>
+
+        
+            <tr id="rule_detail_18" class="colored_subsection white_row rule_detail" style="display:none;">
+        
+        <td style="padding-left:8px;">
+          <table border="0" cellspacing="0">
+            <tr>
+              <td>
+                <b>Score:</b> 10
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Targets:</b> Feature
+              </td>
+            </tr>
+            
+          </table>
+        </td>
+        </tr>
+
+        
+    
+        
+            <tr class="notes blue_title_row" onclick="updateDisplayStatus(document.getElementById('rule_detail_19'));updateDivScroll('rules', 'rules_table');">
+        
+
+            <td>
+              Same tag appears on Feature.
+            </td>
+        </tr>
+
+        
+            <tr id="rule_detail_19" class="colored_subsection blue_row rule_detail" style="display:none;">
+        
+        <td style="padding-left:8px;">
+          <table border="0" cellspacing="0">
+            <tr>
+              <td>
+                <b>Score:</b> 10
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Targets:</b> Feature
+              </td>
+            </tr>
+            
+          </table>
+        </td>
+        </tr>
+
+        
+    
+        
+            <tr class="notes white_title_row" onclick="updateDisplayStatus(document.getElementById('rule_detail_20'));updateDivScroll('rules', 'rules_table');">
+        
+
+            <td>
+              Pending step definition. Implement or remove.
+            </td>
+        </tr>
+
+        
+            <tr id="rule_detail_20" class="colored_subsection white_row rule_detail" style="display:none;">
+        
+        <td style="padding-left:8px;">
+          <table border="0" cellspacing="0">
+            <tr>
+              <td>
+                <b>Score:</b> 10
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Targets:</b> StepDefinition
+              </td>
+            </tr>
+            
+          </table>
+        </td>
+        </tr>
+
+        
+    
+        
+            <tr class="notes blue_title_row" onclick="updateDisplayStatus(document.getElementById('rule_detail_21'));updateDivScroll('rules', 'rules_table');">
+        
+
+            <td>
+              Lazy Debugging through puts, p, or print
+            </td>
+        </tr>
+
+        
+            <tr id="rule_detail_21" class="colored_subsection blue_row rule_detail" style="display:none;">
+        
+        <td style="padding-left:8px;">
+          <table border="0" cellspacing="0">
+            <tr>
+              <td>
+                <b>Score:</b> 10
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Targets:</b> StepDefinition
+              </td>
+            </tr>
+            
+          </table>
+        </td>
+        </tr>
+
+        
+    
+        
+            <tr class="notes white_title_row" onclick="updateDisplayStatus(document.getElementById('rule_detail_22'));updateDivScroll('rules', 'rules_table');">
+        
+
+            <td>
+              Too many parameters in Step Definition.
+            </td>
+        </tr>
+
+        
+            <tr id="rule_detail_22" class="colored_subsection white_row rule_detail" style="display:none;">
+        
+        <td style="padding-left:8px;">
+          <table border="0" cellspacing="0">
+            <tr>
+              <td>
+                <b>Score:</b> 10
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Targets:</b> StepDefinition
+              </td>
+            </tr>
+            
+                <tr>
+                  <td>
+                    <b>Conditions:</b>
+                    <table style="padding-left: 4px;">
+                      
+                          <tr>
+                            <td>
+                              max:
+                            </td>
+                            <td>
+                              4
+                            </td>
+                          </tr>
+                      
+                    </table>
+                  </td>
+                </tr>
+            
+          </table>
+        </td>
+        </tr>
+
+        
+    
+        
+            <tr class="notes blue_title_row" onclick="updateDisplayStatus(document.getElementById('rule_detail_23'));updateDivScroll('rules', 'rules_table');">
+        
+
+            <td>
+              Given/When/Then used multiple times in the same {class}.
+            </td>
+        </tr>
+
+        
+            <tr id="rule_detail_23" class="colored_subsection blue_row rule_detail" style="display:none;">
+        
+        <td style="padding-left:8px;">
+          <table border="0" cellspacing="0">
+            <tr>
+              <td>
+                <b>Score:</b> 10
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Targets:</b> Scenario, Background
+              </td>
+            </tr>
+            
+          </table>
+        </td>
+        </tr>
+
+        
+    
+        
+            <tr class="notes white_title_row" onclick="updateDisplayStatus(document.getElementById('rule_detail_24'));updateDivScroll('rules', 'rules_table');">
+        
+
+            <td>
+              Scenario Outline with too many examples.
+            </td>
+        </tr>
+
+        
+            <tr id="rule_detail_24" class="colored_subsection white_row rule_detail" style="display:none;">
+        
+        <td style="padding-left:8px;">
+          <table border="0" cellspacing="0">
+            <tr>
+              <td>
+                <b>Score:</b> 10
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Targets:</b> Scenario
+              </td>
+            </tr>
+            
+                <tr>
+                  <td>
+                    <b>Conditions:</b>
+                    <table style="padding-left: 4px;">
+                      
+                          <tr>
+                            <td>
+                              max:
+                            </td>
+                            <td>
+                              10
+                            </td>
+                          </tr>
+                      
+                    </table>
+                  </td>
+                </tr>
+            
+          </table>
+        </td>
+        </tr>
+
+        
+    
+        
+            <tr class="notes blue_title_row" onclick="updateDisplayStatus(document.getElementById('rule_detail_25'));updateDivScroll('rules', 'rules_table');">
+        
+
+            <td>
+              There are commas in the description, creating possible multirunning scenarios or features.
+            </td>
+        </tr>
+
+        
+            <tr id="rule_detail_25" class="colored_subsection blue_row rule_detail" style="display:none;">
+        
+        <td style="padding-left:8px;">
+          <table border="0" cellspacing="0">
+            <tr>
+              <td>
+                <b>Score:</b> 10
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Targets:</b> Feature, Scenario
+              </td>
+            </tr>
+            
+          </table>
+        </td>
+        </tr>
+
+        
+    
+        
+            <tr class="notes white_title_row" onclick="updateDisplayStatus(document.getElementById('rule_detail_26'));updateDivScroll('rules', 'rules_table');">
+        
+
+            <td>
+              Step includes a * instead of Given/When/Then/And/But.
+            </td>
+        </tr>
+
+        
+            <tr id="rule_detail_26" class="colored_subsection white_row rule_detail" style="display:none;">
+        
+        <td style="padding-left:8px;">
+          <table border="0" cellspacing="0">
+            <tr>
+              <td>
+                <b>Score:</b> 10
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Targets:</b> Scenario, Background
+              </td>
+            </tr>
+            
+          </table>
+        </td>
+        </tr>
+
+        
+    
+        
+            <tr class="notes blue_title_row" onclick="updateDisplayStatus(document.getElementById('rule_detail_27'));updateDivScroll('rules', 'rules_table');">
+        
+
+            <td>
+              Invalid first step. Began with And/But.
+            </td>
+        </tr>
+
+        
+            <tr id="rule_detail_27" class="colored_subsection blue_row rule_detail" style="display:none;">
+        
+        <td style="padding-left:8px;">
+          <table border="0" cellspacing="0">
+            <tr>
+              <td>
+                <b>Score:</b> 10
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Targets:</b> Scenario, Background
+              </td>
+            </tr>
+            
+          </table>
+        </td>
+        </tr>
+
+        
+    
+        
+            <tr class="notes white_title_row" onclick="updateDisplayStatus(document.getElementById('rule_detail_28'));updateDivScroll('rules', 'rules_table');">
+        
+
+            <td>
+              Scenario steps out of Given/When/Then order.
+            </td>
+        </tr>
+
+        
+            <tr id="rule_detail_28" class="colored_subsection white_row rule_detail" style="display:none;">
+        
+        <td style="padding-left:8px;">
+          <table border="0" cellspacing="0">
+            <tr>
+              <td>
+                <b>Score:</b> 10
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Targets:</b> Scenario
+              </td>
+            </tr>
+            
+          </table>
+        </td>
+        </tr>
+
+        
+    
+        
+            <tr class="notes blue_title_row" onclick="updateDisplayStatus(document.getElementById('rule_detail_29'));updateDivScroll('rules', 'rules_table');">
+        
+
+            <td>
+              {class} with too many steps.
+            </td>
+        </tr>
+
+        
+            <tr id="rule_detail_29" class="colored_subsection blue_row rule_detail" style="display:none;">
+        
+        <td style="padding-left:8px;">
+          <table border="0" cellspacing="0">
+            <tr>
+              <td>
+                <b>Score:</b> 10
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Targets:</b> Scenario, Background
+              </td>
+            </tr>
+            
+                <tr>
+                  <td>
+                    <b>Conditions:</b>
+                    <table style="padding-left: 4px;">
+                      
+                          <tr>
+                            <td>
+                              max:
+                            </td>
+                            <td>
+                              7
+                            </td>
+                          </tr>
+                      
+                    </table>
+                  </td>
+                </tr>
+            
+          </table>
+        </td>
+        </tr>
+
+        
+    
+        
+            <tr class="notes white_title_row" onclick="updateDisplayStatus(document.getElementById('rule_detail_30'));updateDivScroll('rules', 'rules_table');">
+        
+
+            <td>
+              Feature has a background with one scenario.
+            </td>
+        </tr>
+
+        
+            <tr id="rule_detail_30" class="colored_subsection white_row rule_detail" style="display:none;">
+        
+        <td style="padding-left:8px;">
+          <table border="0" cellspacing="0">
+            <tr>
+              <td>
+                <b>Score:</b> 10
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Targets:</b> Feature
+              </td>
+            </tr>
+            
+          </table>
+        </td>
+        </tr>
+
+        
+    
+        
+            <tr class="notes blue_title_row" onclick="updateDisplayStatus(document.getElementById('rule_detail_31'));updateDivScroll('rules', 'rules_table');">
+        
+
+            <td>
+              Feature has a background with no scenarios.
+            </td>
+        </tr>
+
+        
+            <tr id="rule_detail_31" class="colored_subsection blue_row rule_detail" style="display:none;">
+        
+        <td style="padding-left:8px;">
+          <table border="0" cellspacing="0">
+            <tr>
+              <td>
+                <b>Score:</b> 10
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Targets:</b> Feature
+              </td>
+            </tr>
+            
+          </table>
+        </td>
+        </tr>
+
+        
+    
+        
+            <tr class="notes white_title_row" onclick="updateDisplayStatus(document.getElementById('rule_detail_32'));updateDivScroll('rules', 'rules_table');">
+        
+
+            <td>
+              Feature file has no content.
+            </td>
+        </tr>
+
+        
+            <tr id="rule_detail_32" class="colored_subsection white_row rule_detail" style="display:none;">
+        
+        <td style="padding-left:8px;">
+          <table border="0" cellspacing="0">
+            <tr>
+              <td>
+                <b>Score:</b> 10
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Targets:</b> Feature
+              </td>
+            </tr>
+            
+          </table>
+        </td>
+        </tr>
+
+        
+    
+        
+            <tr class="notes blue_title_row" onclick="updateDisplayStatus(document.getElementById('rule_detail_33'));updateDivScroll('rules', 'rules_table');">
+        
+
+            <td>
+              {class} has numbers in the description.
+            </td>
+        </tr>
+
+        
+            <tr id="rule_detail_33" class="colored_subsection blue_row rule_detail" style="display:none;">
+        
+        <td style="padding-left:8px;">
+          <table border="0" cellspacing="0">
+            <tr>
+              <td>
+                <b>Score:</b> 10
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Targets:</b> Feature, Scenario, Background
+              </td>
+            </tr>
+            
+          </table>
+        </td>
+        </tr>
+
+        
+    
+        
+            <tr class="notes white_title_row" onclick="updateDisplayStatus(document.getElementById('rule_detail_34'));updateDivScroll('rules', 'rules_table');">
+        
+
+            <td>
+              Hook has duplicate tags.
+            </td>
+        </tr>
+
+        
+            <tr id="rule_detail_34" class="colored_subsection white_row rule_detail" style="display:none;">
+        
+        <td style="padding-left:8px;">
+          <table border="0" cellspacing="0">
+            <tr>
+              <td>
+                <b>Score:</b> 10
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Targets:</b> Hook
+              </td>
+            </tr>
+            
+          </table>
+        </td>
+        </tr>
+
+        
+    
+        
+            <tr class="notes blue_title_row" onclick="updateDisplayStatus(document.getElementById('rule_detail_35'));updateDivScroll('rules', 'rules_table');">
+        
+
+            <td>
+              Hook with no content.
+            </td>
+        </tr>
+
+        
+            <tr id="rule_detail_35" class="colored_subsection blue_row rule_detail" style="display:none;">
+        
+        <td style="padding-left:8px;">
+          <table border="0" cellspacing="0">
+            <tr>
+              <td>
+                <b>Score:</b> 10
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Targets:</b> Hook
+              </td>
+            </tr>
+            
+          </table>
+        </td>
+        </tr>
+
+        
+    
+        
+            <tr class="notes white_title_row" onclick="updateDisplayStatus(document.getElementById('rule_detail_36'));updateDivScroll('rules', 'rules_table');">
+        
+
+            <td>
+              Hook is only comments.
+            </td>
+        </tr>
+
+        
+            <tr id="rule_detail_36" class="colored_subsection white_row rule_detail" style="display:none;">
+        
+        <td style="padding-left:8px;">
+          <table border="0" cellspacing="0">
+            <tr>
+              <td>
+                <b>Score:</b> 10
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Targets:</b> Hook
+              </td>
+            </tr>
+            
+          </table>
+        </td>
+        </tr>
+
+        
+    
+        
+            <tr class="notes blue_title_row" onclick="updateDisplayStatus(document.getElementById('rule_detail_37'));updateDivScroll('rules', 'rules_table');">
+        
+
+            <td>
+              {class} has a commented out tag
+            </td>
+        </tr>
+
+        
+            <tr id="rule_detail_37" class="colored_subsection blue_row rule_detail" style="display:none;">
+        
+        <td style="padding-left:8px;">
+          <table border="0" cellspacing="0">
+            <tr>
+              <td>
+                <b>Score:</b> 10
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Targets:</b> Feature, Scenario
+              </td>
+            </tr>
+            
+          </table>
+        </td>
+        </tr>
+
+        
+    
+        
+            <tr class="notes white_title_row" onclick="updateDisplayStatus(document.getElementById('rule_detail_38'));updateDivScroll('rules', 'rules_table');">
+        
+
+            <td>
+              {class} has too many tags.
+            </td>
+        </tr>
+
+        
+            <tr id="rule_detail_38" class="colored_subsection white_row rule_detail" style="display:none;">
+        
+        <td style="padding-left:8px;">
+          <table border="0" cellspacing="0">
+            <tr>
+              <td>
+                <b>Score:</b> 1
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Targets:</b> Feature, Scenario
+              </td>
+            </tr>
+            
+                <tr>
+                  <td>
+                    <b>Conditions:</b>
+                    <table style="padding-left: 4px;">
+                      
+                          <tr>
+                            <td>
+                              max:
+                            </td>
+                            <td>
+                              8
+                            </td>
+                          </tr>
+                      
+                    </table>
+                  </td>
+                </tr>
+            
+          </table>
+        </td>
+        </tr>
+
+        
+    
+        
+            <tr class="notes blue_title_row" onclick="updateDisplayStatus(document.getElementById('rule_detail_39'));updateDivScroll('rules', 'rules_table');">
+        
+
+            <td>
+              {class} has a long description.
+            </td>
+        </tr>
+
+        
+            <tr id="rule_detail_39" class="colored_subsection blue_row rule_detail" style="display:none;">
+        
+        <td style="padding-left:8px;">
+          <table border="0" cellspacing="0">
+            <tr>
+              <td>
+                <b>Score:</b> 1
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Targets:</b> Feature, Scenario, Background
+              </td>
+            </tr>
+            
+                <tr>
+                  <td>
+                    <b>Conditions:</b>
+                    <table style="padding-left: 4px;">
+                      
+                          <tr>
+                            <td>
+                              max:
+                            </td>
+                            <td>
+                              180
+                            </td>
+                          </tr>
+                      
+                    </table>
+                  </td>
+                </tr>
+            
+          </table>
+        </td>
+        </tr>
+
+        
+    
+        
+            <tr class="notes white_title_row" onclick="updateDisplayStatus(document.getElementById('rule_detail_40'));updateDivScroll('rules', 'rules_table');">
+        
+
+            <td>
+              Implementation word used: {word}.
+            </td>
+        </tr>
+
+        
+            <tr id="rule_detail_40" class="colored_subsection white_row rule_detail" style="display:none;">
+        
+        <td style="padding-left:8px;">
+          <table border="0" cellspacing="0">
+            <tr>
+              <td>
+                <b>Score:</b> 1
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Targets:</b> Scenario, Background
+              </td>
+            </tr>
+            
+                <tr>
+                  <td>
+                    <b>Conditions:</b>
+                    <table style="padding-left: 4px;">
+                      
+                          <tr>
+                            <td>
+                              words:
+                            </td>
+                            <td>
+                              ["page", "site", "url", "drop down", "dropdown", "select list", "click", "text box", "radio button", "check box", "xml", "window", "pop up", "pop-up", "screen", "database", "DB"]
+                            </td>
+                          </tr>
+                      
+                    </table>
+                  </td>
+                </tr>
+            
+          </table>
+        </td>
+        </tr>
+
+        
+    
+        
+            <tr class="notes blue_title_row" onclick="updateDisplayStatus(document.getElementById('rule_detail_41'));updateDivScroll('rules', 'rules_table');">
+        
+
+            <td>
+              Implementation word used: button.
+            </td>
+        </tr>
+
+        
+            <tr id="rule_detail_41" class="colored_subsection blue_row rule_detail" style="display:none;">
+        
+        <td style="padding-left:8px;">
+          <table border="0" cellspacing="0">
+            <tr>
+              <td>
+                <b>Score:</b> 1
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Targets:</b> Scenario
+              </td>
+            </tr>
+            
+          </table>
+        </td>
+        </tr>
+
+        
+    
+        
+            <tr class="notes white_title_row" onclick="updateDisplayStatus(document.getElementById('rule_detail_42'));updateDivScroll('rules', 'rules_table');">
+        
+
+            <td>
+              Implementation word used: tab.
+            </td>
+        </tr>
+
+        
+            <tr id="rule_detail_42" class="colored_subsection white_row rule_detail" style="display:none;">
+        
+        <td style="padding-left:8px;">
+          <table border="0" cellspacing="0">
+            <tr>
+              <td>
+                <b>Score:</b> 1
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Targets:</b> Scenario
+              </td>
+            </tr>
+            
+          </table>
+        </td>
+        </tr>
+
+        
+    
+        
+            <tr class="notes blue_title_row" onclick="updateDisplayStatus(document.getElementById('rule_detail_43'));updateDivScroll('rules', 'rules_table');">
+        
+
+            <td>
+              Feature with too many scenarios.
+            </td>
+        </tr>
+
+        
+            <tr id="rule_detail_43" class="colored_subsection blue_row rule_detail" style="display:none;">
+        
+        <td style="padding-left:8px;">
+          <table border="0" cellspacing="0">
+            <tr>
+              <td>
+                <b>Score:</b> 1
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Targets:</b> Feature
+              </td>
+            </tr>
+            
+                <tr>
+                  <td>
+                    <b>Conditions:</b>
+                    <table style="padding-left: 4px;">
+                      
+                          <tr>
+                            <td>
+                              max:
+                            </td>
+                            <td>
+                              10
+                            </td>
+                          </tr>
+                      
+                    </table>
+                  </td>
+                </tr>
+            
+          </table>
+        </td>
+        </tr>
+
+        
+    
+        
+            <tr class="notes white_title_row" onclick="updateDisplayStatus(document.getElementById('rule_detail_44'));updateDivScroll('rules', 'rules_table');">
+        
+
+            <td>
+              Date used.
+            </td>
+        </tr>
+
+        
+            <tr id="rule_detail_44" class="colored_subsection white_row rule_detail" style="display:none;">
+        
+        <td style="padding-left:8px;">
+          <table border="0" cellspacing="0">
+            <tr>
+              <td>
+                <b>Score:</b> 1
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Targets:</b> Scenario, Background
+              </td>
+            </tr>
+            
+          </table>
+        </td>
+        </tr>
+
+        
+    
+        
+            <tr class="notes blue_title_row" onclick="updateDisplayStatus(document.getElementById('rule_detail_45'));updateDivScroll('rules', 'rules_table');">
+        
+
+            <td>
+              Nested step call.
+            </td>
+        </tr>
+
+        
+            <tr id="rule_detail_45" class="colored_subsection blue_row rule_detail" style="display:none;">
+        
+        <td style="padding-left:8px;">
+          <table border="0" cellspacing="0">
+            <tr>
+              <td>
+                <b>Score:</b> 1
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Targets:</b> StepDefinition
+              </td>
+            </tr>
+            
+          </table>
+        </td>
+        </tr>
+
+        
+    
+        
+            <tr class="notes white_title_row" onclick="updateDisplayStatus(document.getElementById('rule_detail_46'));updateDivScroll('rules', 'rules_table');">
+        
+
+            <td>
+              Commented code in Step Definition.
+            </td>
+        </tr>
+
+        
+            <tr id="rule_detail_46" class="colored_subsection white_row rule_detail" style="display:none;">
+        
+        <td style="padding-left:8px;">
+          <table border="0" cellspacing="0">
+            <tr>
+              <td>
+                <b>Score:</b> 1
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Targets:</b> StepDefinition
+              </td>
+            </tr>
+            
+          </table>
+        </td>
+        </tr>
+
+        
+    
+        
+            <tr class="notes blue_title_row" onclick="updateDisplayStatus(document.getElementById('rule_detail_47'));updateDivScroll('rules', 'rules_table');">
+        
+
+            <td>
+              Small sleeps used. Use a wait_until like method.
+            </td>
+        </tr>
+
+        
+            <tr id="rule_detail_47" class="colored_subsection blue_row rule_detail" style="display:none;">
+        
+        <td style="padding-left:8px;">
+          <table border="0" cellspacing="0">
+            <tr>
+              <td>
+                <b>Score:</b> 1
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Targets:</b> StepDefinition
+              </td>
+            </tr>
+            
+                <tr>
+                  <td>
+                    <b>Conditions:</b>
+                    <table style="padding-left: 4px;">
+                      
+                          <tr>
+                            <td>
+                              max:
+                            </td>
+                            <td>
+                              2
+                            </td>
+                          </tr>
+                      
+                    </table>
+                  </td>
+                </tr>
+            
+          </table>
+        </td>
+        </tr>
+
+        
+    
+        
+            <tr class="notes white_title_row" onclick="updateDisplayStatus(document.getElementById('rule_detail_48'));updateDivScroll('rules', 'rules_table');">
+        
+
+            <td>
+              Large sleeps used. Use a wait_until like method.
+            </td>
+        </tr>
+
+        
+            <tr id="rule_detail_48" class="colored_subsection white_row rule_detail" style="display:none;">
+        
+        <td style="padding-left:8px;">
+          <table border="0" cellspacing="0">
+            <tr>
+              <td>
+                <b>Score:</b> 1
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Targets:</b> StepDefinition
+              </td>
+            </tr>
+            
+                <tr>
+                  <td>
+                    <b>Conditions:</b>
+                    <table style="padding-left: 4px;">
+                      
+                          <tr>
+                            <td>
+                              min:
+                            </td>
+                            <td>
+                              2
+                            </td>
+                          </tr>
+                      
+                    </table>
+                  </td>
+                </tr>
+            
+          </table>
+        </td>
+        </tr>
+
+        
+    
+        
+            <tr class="notes blue_title_row" onclick="updateDisplayStatus(document.getElementById('rule_detail_49'));updateDivScroll('rules', 'rules_table');">
+        
+
+            <td>
+              Todo found. Resolve it.
+            </td>
+        </tr>
+
+        
+            <tr id="rule_detail_49" class="colored_subsection blue_row rule_detail" style="display:none;">
+        
+        <td style="padding-left:8px;">
+          <table border="0" cellspacing="0">
+            <tr>
+              <td>
+                <b>Score:</b> 1
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Targets:</b> StepDefinition
+              </td>
+            </tr>
+            
+          </table>
+        </td>
+        </tr>
+
+        
+    
+        
+            <tr class="notes white_title_row" onclick="updateDisplayStatus(document.getElementById('rule_detail_50'));updateDivScroll('rules', 'rules_table');">
+        
+
+            <td>
+              Hook found outside of the designated hooks file
+            </td>
+        </tr>
+
+        
+            <tr id="rule_detail_50" class="colored_subsection white_row rule_detail" style="display:none;">
+        
+        <td style="padding-left:8px;">
+          <table border="0" cellspacing="0">
+            <tr>
+              <td>
+                <b>Score:</b> 1
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Targets:</b> Hook
+              </td>
+            </tr>
+            
+                <tr>
+                  <td>
+                    <b>Conditions:</b>
+                    <table style="padding-left: 4px;">
+                      
+                          <tr>
+                            <td>
+                              file:
+                            </td>
+                            <td>
+                              hooks.rb
+                            </td>
+                          </tr>
+                      
+                    </table>
+                  </td>
+                </tr>
+            
+          </table>
+        </td>
+        </tr>
+
+        
+    
+  </table>
+</div>
+<br style="clear:both">
+<div class="title" onclick="toggleById('dead_steps_data', this); updateDisplayStatus(document.getElementById('dead_steps_function_bar'));updateDivScroll('dead_steps_data', 'dead_steps_table');">
+  Dead Steps +
+</div>
+<div id="dead_steps_function_bar" class="function_bar">
+  <input type="button" class="function_button" value="Collapse All" onclick="collapseAll('dead_step_detail')" />
+  <input type="button" class="function_button" value="Expand All" onclick="expandAllShiftingRows('dead_step_detail')" />
+</div>
+<div class="new_sub_section" id="dead_steps_data">
+  
+  
+  
+  
+      <div class="notes">No dead steps found!</div>
+  
+  
+</div>
+<br style="clear:both">
+<div class="title" onclick="toggleById('features_data', this);updateDisplayStatus(document.getElementById('feature_function_bar'));updateDivScroll('features_data', 'features_table');">
+  Features +
+</div>
+
+<div id="feature_function_bar" class="function_bar">
+  <input type="button" class="function_button" value="Collapse All" onclick="collapseAll('feature_detail')" />
+  <input type="button" class="function_button" value="Expand All" onclick="expandAllShiftingRows('feature_detail')" />
+</div>
+
+<div class="new_sub_section" id="features_data">
+  
+
+  <table id="features_table" border="0" cellspacing="0" style="width:100%;padding-left: 2px">
+    
+    
+        
+        
+            <tr class="notes white_title_row" style="cursor: hand;" onclick="updateDisplayStatus(document.getElementById('feature_detail_0'));updateDivScroll('features_data', 'features_table');">
+        
+          <td valign="top" class="red_number" style="width:1%">
+            20
+          </td>
+          <td style="padding-left: 2px; width:100%;">
+            
+                PIPPA alert
+            
+          </td>
+        </tr>
+        
+            <tr id="feature_detail_0" class="white_row feature_detail" style="display:none;">
+        
+
+          <td colspan="2">
+            <table border="0" cellspacing="0" class="colored_subsection">
+              <tr>
+                <td>
+                  
+                </td>
+                <td style="text-align: right;">
+                  <a href="file:////Users/fislam/git/REST-Cucumber-RackTest/features/sports_list.feature" title="Note: Links to file on system this report was generated.">
+                    /features/sports_list.feature
+                  </a>
+                </td>
+              </tr>
+              
+              
+                  
+                  <tr>
+                    <td valign="top" style="border-top: 2px solid #509f50">
+                      <div style="display:inline;" class="red_number">20</div>
+                      <div style="display:inline; padding-left: 2px; width:100%;">Scenario
+                        : Creating an alert for PIPPA</div>
+                    </td>
+                    <td valign="top" style="padding-left:2px;border-top: 2px solid #509f50">
+                      
+                          <div>
+                            <div style="color:red; display:inline-block;">
+                              1
+                            </div>
+                            <div style="display:inline-block;">
+                              Given/When/Then used multiple times in the same Scenario.
+                            </div>
+                          </div>
+                      
+                          <div>
+                            <div style="color:red; display:inline-block;">
+                              1
+                            </div>
+                            <div style="display:inline-block;">
+                              Scenario steps out of Given/When/Then order.
+                            </div>
+                          </div>
+                      
+                    </td>
+                  </tr>
+              
+            </table>
+          </td>
+        </tr>
+        
+    
+  </table>
+</div>
+<br style="clear:both">
+
+<div class="title" onclick="toggleById('step_definitions_data', this);updateDisplayStatus(document.getElementById('step_definition_function_bar'));updateDivScroll('step_definitions_data', 'step_definitions_table');">
+  Step Definitions +
+</div>
+
+<div id="step_definition_function_bar" class="function_bar">
+  <input type="button" class="function_button" value="Collapse All" onclick="collapseAll('step_definition_detail')" />
+  <input type="button" class="function_button" value="Expand All" onclick="expandAllShiftingRows('step_definition_detail')" />
+</div>
+
+<div class="new_sub_section" id="step_definitions_data">
+  
+      <div class="empty_set_message">Excellent! No smells found for Step Definitions!</div>
+  
+  <table id="step_definitions_table" style="width:100%;" border="0" cellspacing="0">
+    
+    
+        
+        
+        
+        
+        
+  </table>
+</div>
+<br style="clear:both">
+
+<div class="title" onclick="toggleById('hooks_data', this);updateDisplayStatus(document.getElementById('hooks_function_bar'));updateDivScroll('hooks_data', 'hooks_table');">
+  Hooks +
+</div>
+
+<div id="hooks_function_bar" class="function_bar">
+  <input type="button" class="function_button" value="Collapse All" onclick="collapseAll('hook_detail')" />
+  <input type="button" class="function_button" value="Expand All" onclick="expandAllShiftingRows('hook_detail')" />
+</div>
+
+<div class="new_sub_section" id="hooks_data">
+  
+      <div class="empty_set_message">There were no Hooks to sniff in '/Users/fislam/git/REST-Cucumber-RackTest'!</div>
+  
+  <table id="hooks_table" style="width:100%;" border="0" cellspacing="0">
+    
+    
+  </table>
+</div>
+<br style="clear:both">
