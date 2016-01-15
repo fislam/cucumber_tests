@@ -10,7 +10,7 @@ DB_INFO = {
     :user_name => 'idgtool',
     :password => 'idgtoolPassword'
 }
-check_post_response = ''
+request_activation_response = ''
 
 Given(/^the customer is currently not installed in EWS$/) do
   tool_accounts_response = HTTParty.get('http://localhost:8080/tool_accounts/',
@@ -20,24 +20,27 @@ end
 
 Given(/^an add request is currently not in flight awaiting a response from the vendor$/) do
   status = ''
+
   connection = PGconn.connect(DB_INFO[:ip], DB_INFO[:port], nil, nil, nil, DB_INFO[:user_name], DB_INFO[:password])
   tool_account_result = connection.exec("select * from tool_account where user_id='#{USER_ID}' AND tool_id='EWS'")
   tool_account_id = tool_account_result[0]['id']
   account_request_result = connection.exec("select status from account_request where tool_account_id='#{tool_account_id}'")
+
   account_request_result.each do |row|
     status = row['status']
   end
+
   status.downcase.should eq('queued')
   connection.close
 end
 
-When(/^subscriber has requested an activation of EWS tool$/) do
-  check_post_response = HTTParty.post('http://localhost:8080/tool_accounts/ews',
+When(/^subscriber has requested an activation of "([^"]*)" tool$/) do |tool|
+  request_activation_response = HTTParty.post("http://localhost:8080/tool_accounts/#{tool}",
     :headers => {'PN-Authorization' => USER_ID,
                  'Content-type' => 'application/json'})
 end
 
 Then(/^I should queue an add request$/) do
-  check_post_response['active'].should eq(false)
-  check_post_response['pendingActive'].should eq(true)
+  request_activation_response['active'].should eq(false)
+  request_activation_response['pendingActive'].should eq(true)
 end
